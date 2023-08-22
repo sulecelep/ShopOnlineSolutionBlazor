@@ -10,12 +10,21 @@ namespace ShopOnline.Web.Pages
         public IProductService ProductService { get; set; }
 
         public IEnumerable<ProductDto> Products { get; set; }
-
+        public string ErrorMessage { get; set; }
         protected override async Task OnInitializedAsync()
         {
             //Blazor life cycle event
             //Burayı model gibi düşün Products ve ProductService fieldlarını tanımladık bunu burada ProductService classında Api katmanından çektiğimiz verilerle dolduruyoruz.
-            Products = await ProductService.GetItems();
+            
+            try
+            {
+                Products = await ProductService.GetItems();
+            }
+            catch (Exception ex)
+            {
+
+                ErrorMessage = ex.Message;
+            }
         }
         protected IOrderedEnumerable<IGrouping<int, ProductDto>> GetGroupedProductsByCategory()
         {
